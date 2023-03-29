@@ -1,0 +1,97 @@
+<div id="pagination"></div>
+<style>
+.page{
+width: 60px;
+border: 1px solid black;
+padding: 20px;
+}
+  .current{
+width: 60px;
+background-color: burlywood;
+color: black;
+padding: 20px;
+  }
+</style>
+<script>
+
+const totalPages = 20;
+
+// default page
+let currentPage = 1;
+
+// Render pagination links
+const renderPagination = () => {
+  // rendring the page button in this variable
+  let paginationHTML = '';
+
+  // Previous page link , if page is on 2 then show prev button else hide it 
+  if (currentPage > 1) {
+    // highlight the current page
+    paginationHTML += '<a href="#" class="prev">&laquo; Previous</a>';
+  }
+
+  // Page links , buttons are divided in these two var
+  let startPage, endPage;
+  if (totalPages <= 11) {
+    // Less than 11 total pages so show all
+    startPage = 1;
+    // to show 11 page in row 
+    
+    endPage = totalPages;
+  } else {
+    // More than 11 total pages so calculate start and end pages
+    // if selected page is 1 and not 7 
+    if (currentPage <= 6) {
+      startPage = 1;
+      endPage = 11;
+}
+// if selected page is 7 = 
+else if (currentPage + 5 >= totalPages) {
+startPage = totalPages - 10;
+endPage = totalPages;
+} 
+// if selected page is 20 = 
+else {  
+startPage = currentPage - 5;
+endPage = currentPage + 5;
+}}
+// genrating pages here ( buttons)
+// 
+// if startpage = 5 and endpage =10 loop will run 10 time from 5 to 10
+for (let i = startPage; i <= endPage; i++) {
+// if i equal to selected page make it span else a  
+if (i === currentPage) {
+paginationHTML += `<span class="current">${i}</span>`;
+} else {
+paginationHTML += `<a href="#" class="page" data-page="${i}">${i}</a>`;
+}
+  }
+// Next page link
+  if (currentPage < totalPages) {paginationHTML += '<a href="#" class="next">Next &raquo;</a>';}
+document.getElementById('pagination').innerHTML = paginationHTML;
+};
+// initial render
+renderPagination();
+// just...
+// jump on page if click on page button number
+document.getElementById('pagination').addEventListener('click', event => {
+  event.preventDefault();
+//  handle page button click
+  if (event.target.classList.contains('page')) {
+// get current page no by which element is clicked
+    currentPage = parseInt(event.target.getAttribute('data-page')); // its value is 
+    renderPagination();
+  }
+// handle next button click
+  if (event.target.classList.contains('prev')) {
+    // minus one page
+    currentPage--;
+    renderPagination();
+  }
+// handle prev button click
+  if (event.target.classList.contains('next')) {
+    currentPage++;
+    renderPagination();
+  }
+});
+</script>
